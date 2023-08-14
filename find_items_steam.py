@@ -38,27 +38,6 @@ async def get_item_names(start: int):
     print(f'Done parsing {start} chunk in {time.time()-t1}s')
     return names
 
-@stub.function(image=image, retries=5)
-async def get_item_price_history(start: int):
-    import aiohttp
-
-    base_url  = 'https://steamcommunity.com/market/search/render/?search_descriptions=0&sort_column=default&sort_dir=desc&appid=730&norender=1&count=50&start={}'
-
-    t1 = time.time()
-    async with aiohttp.ClientSession() as session:
-
-        async with session.get(base_url.format(start)) as resp:
-            resp = await resp.json()
-            
-    if resp['total_count'] == 0:
-        raise ValueError(f'Empty responce {start}')
-    
-    names = [item['hash_name'] for item in resp['results']]
-    print(f'Done parsing {start} chunk in {time.time()-t1}s')
-    return names
-
-
-
 
 
 @stub.local_entrypoint()
